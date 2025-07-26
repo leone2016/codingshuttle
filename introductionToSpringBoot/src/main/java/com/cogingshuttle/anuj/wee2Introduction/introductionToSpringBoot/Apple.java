@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 //@Component()
 public class Apple {
+
     void eatApple(){
         System.out.println("Eating an apple!");
     }
