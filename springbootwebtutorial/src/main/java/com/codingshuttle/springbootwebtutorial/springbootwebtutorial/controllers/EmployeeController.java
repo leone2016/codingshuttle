@@ -2,13 +2,22 @@ package com.codingshuttle.springbootwebtutorial.springbootwebtutorial.controller
 
 
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.dto.EmployeeDTO;
+import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.entities.EmployeeEntity;
+import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.services.EmployeeService;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/employees")
 public class EmployeeController {
+
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
 
     @GetMapping(path = "/getSecret")
     public String getMySupperSecretMessage(){
@@ -17,22 +26,19 @@ public class EmployeeController {
 
     @GetMapping(path="/{employeeId}")
     public EmployeeDTO getEmployeeById(@PathVariable("employeeId") Long id){
-        EmployeeDTO employeeDTO = new EmployeeDTO(id, "Leonardo",
-                "leoz.31@hotmail.com", 34,
-                LocalDate.of(1991, 11, 10), true );
-        return employeeDTO;
+        ModelMapper mapper = new ModelMapper();
+        return employeeService.getEmployeeById(id);
     }
 
     @GetMapping()
-    public String getAllEmployees(@RequestParam Integer age, @RequestParam String sortBy){
-
-        return "Hi age"+ age + " sortBy: "+sortBy;
+    public List<EmployeeDTO> getAllEmployees(){
+        return employeeService.getAllEmployees();
     }
 
     @PostMapping
     public EmployeeDTO createEmployee(@RequestBody EmployeeDTO employeeDTO){
-        employeeDTO.setId(1991L);
-        return employeeDTO;
+
+        return employeeService.createNewEmployee(employeeDTO);
     }
 
     @PutMapping
