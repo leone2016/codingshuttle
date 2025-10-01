@@ -1,73 +1,47 @@
 package com.codingshuttle.springbootwebtutorial.springbootwebtutorial.dto;
 
+import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.annotation.EmployeeRoleValidation;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmployeeDTO {
     private Long id;
+    @NotEmpty(message = "Name cannot be null or empty")
+    @NotBlank
+    @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     private String name;
+    @Email(message = "Email should be valid")
     private String email;
+    @Min(value = 18, message = "Age should not be less than 18")
+    @Max(value = 75, message = "Age should not be greater than 65")
     private Integer age;
-    private LocalDate dateOfBirth;
+
+    @PastOrPresent(message = "Date of joining cannot be in the future")
+    private LocalDate dateOfJoining;
     @JsonProperty("isActive")
+    @AssertTrue(message = "Employee must be active")
     private Boolean isActive;
 
-    public EmployeeDTO(Long id, String name, String email, Integer age, LocalDate dateOfBirth, Boolean isActive) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.age = age;
-        this.dateOfBirth = dateOfBirth;
-        this.isActive = isActive;
-    }
-    public EmployeeDTO() {}
+    @NotBlank(message = "Role cannot be null or empty")
+//    @Pattern(regexp = "ADMIN|USER|MANAGER", message = "Role must be either ADMIN, USER, or MANAGER")
+    @EmployeeRoleValidation(message = "Role must be either ADMIN, USER, or MANAGER")
+    private String role;
 
-    public String getName() {
-        return name;
-    }
+    @NotNull
+    @Digits(integer = 10, fraction = 2, message = "Salary must be a valid monetary amount with up to 10 digits and 2 decimal places")
+    @Positive(message = "Salary must be positive")
+    @DecimalMin( value = "0.0", inclusive = false, message = "Salary must be greater than 0")
+    @DecimalMax( value = "1000000.0", inclusive = true, message = "Salary must be less than or equal to 1,000,000")
+    private Double salary;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
 }
