@@ -3,6 +3,7 @@ package com.codingshuttle.springbootwebtutorial.springbootwebtutorial.services;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.configs.MapperConfig;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.dto.EmployeeDTO;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.entities.EmployeeEntity;
+import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.exception.ResourceNotFoundException;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.repositories.EmployeeRepository;
 import org.apache.el.util.ReflectionUtil;
 import org.modelmapper.ModelMapper;
@@ -46,16 +47,19 @@ public class EmployeeService  {
     }
 
     public EmployeeDTO updateEmployeeById(EmployeeDTO employeeDTO, Long id) {
+        boolean exists = employeeRepository.existsById(id);
+        if(!exists) throw new ResourceNotFoundException("Employee not found with id: " + id);
+
         EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
         employeeEntity.setId(id);
-        employeeRepository.save(employeeEntity);
+        employeeRepository.save(employeeEntity   );
         return modelMapper.map(employeeEntity, EmployeeDTO.class);
     }
 
 
     public boolean deleteEmployeeById(Long id) {
       boolean exists = employeeRepository.existsById(id);
-      if(!exists) return false;
+        if(!exists) throw new ResourceNotFoundException("Employee not found with id: " + id);
       employeeRepository.deleteById(id);
       return true;
     }

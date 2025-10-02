@@ -37,7 +37,7 @@ public class EmployeeEntity {
     private String role;
 
     @NotNull
-    @Digits(integer = 10, fraction = 2, message = "Salary must be a valid monetary amount with up to 10 digits and 2 decimal places")
-    @Positive(message = "Salary must be positive")
+//    @Digits(integer = 10, fraction = 2, message = "Salary must be a valid monetary amount with up to 10 digits and 2 decimal places")
+//    @Positive(message = "Salary must be positive")
     private Double salary;
 }
